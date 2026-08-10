@@ -311,22 +311,14 @@ const faqLd = {
           </div>
 
           <div class="overflow-hidden rounded-[2rem] border border-[#083b48]/10 bg-white shadow-[0_28px_70px_rgba(8,59,72,.12)]">
-            <div class="relative h-[600px] w-full overflow-hidden">
-              <img
-                src="/images/cloud9-boardwalk.jpg"
-                alt={t.gettingThere.mapTitle}
-                width="1280"
-                height="853"
-                loading="lazy"
-                class="h-full w-full object-cover"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-[#083b48]/70 via-[#083b48]/30 to-transparent"></div>
-              <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <p class="text-xs font-black uppercase tracking-[.18em] text-[#7ee5d7]">General Luna · Siargao</p>
-                <h3 class="mt-2 text-2xl font-black">9.8136625, 126.1651406</h3>
-                <p class="mt-2 text-sm leading-6 text-white/75">{t.gettingThere.mapTitle}</p>
-              </div>
-            </div>
+            <iframe
+              class="map-frame h-[600px] w-full border-0"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15725.737496047737!2d126.15567562837411!3d9.813836414111607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x330409ed5e3da33d%3A0xd2bbc5516a66d5cb!2sCloud%209%20Surfing%20Area!5e0!3m2!1szh-CN!2s!4v1786366809117!5m2!1szh-CN!2s"
+              title={t.gettingThere.mapTitle}
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
           </div>
         </div>
       </section>
