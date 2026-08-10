@@ -1,0 +1,585 @@
+---
+import '../styles/global.css';
+
+const canonicalUrl = Astro.site ? new URL('/', Astro.site).toString() : undefined;
+const ogImage = Astro.site ? new URL('/images/cloud9-hero.jpg', Astro.site).toString() : '/images/cloud9-hero.jpg';
+const schemaImage = Astro.site ? new URL('/images/cloud9-hero.jpg', Astro.site).toString() : undefined;
+
+const faqItems = [
+  {
+    q: 'Is there an entrance fee at Cloud 9?',
+    a: 'Plan for a small managed-area or boardwalk fee. Recent visitor guides commonly report around ₱100 per person, but access rules and fees can change, so confirm at the entrance before you go.',
+  },
+  {
+    q: 'Can beginners surf the main Cloud 9 break?',
+    a: 'The main Cloud 9 peak breaks over a sharp, shallow reef and is best left to experienced surfers when it is solid. Beginners are better served by a local instructor and a friendlier nearby break such as Jacking Horse.',
+  },
+  {
+    q: 'What is the best time to visit?',
+    a: 'For the classic surf atmosphere, September to November is the peak swell period. For sightseeing, sunrise is especially atmospheric, while mid-to-high tide is generally a better window for watching or surfing the main reef break.',
+  },
+  {
+    q: 'Is parking available?',
+    a: 'Parking is available around the managed Cloud 9 entrance and along the access area off Cloud 9 Drive. Space can tighten around sunrise, sunset, weekends, and surf events, so arriving early is the easiest option.',
+  },
+  {
+    q: 'How long should I stay?',
+    a: 'About two hours is a useful baseline for the boardwalk, wave watching, photos, and a nearby snack. Allow longer if you are surfing, booking a lesson nearby, or pairing Cloud 9 with Jacking Horse and the Catangnan coast.',
+  },
+  {
+    q: 'Should I bring cash?',
+    a: 'Yes. Small cash is useful for local fees, transport, snacks, board rentals, and smaller businesses even though digital payments are increasingly common on Siargao.',
+  },
+];
+
+const attractionLd = {
+  '@context': 'https://schema.org',
+  '@type': ['TouristAttraction', 'LocalBusiness'],
+  name: 'Cloud 9 Surfing Area',
+  description:
+    'Visitor guide to Cloud 9 Surfing Area in General Luna, Siargao: an iconic Pacific reef break and boardwalk known for world-class surfing, sunrise views and surf culture.',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'R578+F36 Siargao Island',
+    addressLocality: 'General Luna',
+    addressRegion: 'Surigao del Norte',
+    addressCountry: 'PH',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 9.8136625,
+    longitude: 126.1651406,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '00:00',
+      closes: '23:59',
+    },
+  ],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.5',
+    reviewCount: '3347',
+    bestRating: '5',
+    worstRating: '1',
+  },
+  ...(canonicalUrl ? { url: canonicalUrl } : {}),
+  ...(schemaImage ? { image: schemaImage } : {}),
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+};
+
+const itineraryItems = [
+  { id: 'sunrise-boardwalk', name: 'Sunrise at the Cloud 9 boardwalk', meta: 'Cloud 9 • early morning' },
+  { id: 'wave-watch', name: 'Watch the main reef break', meta: 'Cloud 9 • mid-to-high tide' },
+  { id: 'jacking-horse', name: 'Beginner session at Jacking Horse', meta: 'Nearby • book a local instructor' },
+  { id: 'hawker-stop', name: 'Eat along Cloud 9 Drive', meta: 'Nearby food • casual stop' },
+  { id: 'guyam', name: 'Add Guyam Island', meta: 'Island-hopping extension' },
+  { id: 'magpupungko', name: 'Add Magpupungko', meta: 'Northbound day-trip extension' },
+];
+---
+<!doctype html>
+<html lang="en-PH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#083B48" />
+    <meta
+      name="description"
+      content="A practical one-page guide to Cloud 9 Surfing Area in General Luna, Siargao — surf safety, fees, parking, transport, nearby food, attractions and a private on-device trip list."
+    />
+    <title>Cloud 9 Siargao — Surf, Boardwalk & Visitor Guide</title>
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cloud 9 Siargao — Surf, Boardwalk & Visitor Guide" />
+    <meta property="og:description" content="Plan a Cloud 9 visit around the reef, the boardwalk and the rhythm of Siargao." />
+    <meta property="og:image" content={ogImage} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:locale" content="en_PH" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script type="application/ld+json" set:html={JSON.stringify(attractionLd)}></script>
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)}></script>
+
+    <!-- Google tag (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){window.dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-HXM22WWPKP');
+    </script>
+  </head>
+  <body>
+    <header class="absolute inset-x-0 top-0 z-30 border-b border-white/15 bg-[#083b48]/35 text-white backdrop-blur-md">
+      <div class="shell flex min-h-20 items-center justify-between gap-6">
+        <a href="#top" class="shrink-0" aria-label="Cloud 9 Siargao home">
+          <img src="/logo.svg" alt="Cloud 9 Siargao" width="210" height="52" class="h-12 w-auto rounded-md bg-white/90 px-2 py-1" />
+        </a>
+        <nav aria-label="Main navigation" class="hidden items-center gap-6 text-sm font-bold md:flex">
+          <a href="#visit" class="transition hover:text-[#ffd18b]">Plan</a>
+          <a href="#getting-there" class="transition hover:text-[#ffd18b]">Getting there</a>
+          <a href="#nearby" class="transition hover:text-[#ffd18b]">Nearby</a>
+          <a href="#trip-list" class="transition hover:text-[#ffd18b]">Trip list</a>
+          <a href="#faq" class="transition hover:text-[#ffd18b]">FAQ</a>
+        </nav>
+        <a
+          href="https://www.google.com/maps/search/?api=1&query=9.8136625%2C126.1651406"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-full border border-white/35 bg-white/10 px-4 py-2 text-xs font-extrabold tracking-wide text-white transition hover:bg-white hover:text-[#083b48]"
+        >
+          OPEN MAP ↗
+        </a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="relative isolate min-h-[800px] overflow-hidden bg-[#083b48] text-white">
+        <img
+          src="/images/cloud9-hero.jpg"
+          alt="The Cloud 9 boardwalk stretching across turquoise water in Siargao"
+          width="1280"
+          height="854"
+          fetchpriority="high"
+          class="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,40,49,.90)_0%,rgba(5,40,49,.62)_48%,rgba(5,40,49,.18)_78%),linear-gradient(0deg,rgba(5,40,49,.72)_0%,transparent_50%)]"></div>
+        <div class="absolute -right-40 top-28 h-[520px] w-[520px] rounded-full border border-white/20"></div>
+        <div class="absolute -right-24 top-44 h-[360px] w-[360px] rounded-full border border-white/20"></div>
+        <div class="shell relative flex min-h-[800px] items-end pb-16 pt-36 md:pb-24">
+          <div class="max-w-4xl">
+            <p class="eyebrow mb-7 text-[#ffd18b]">General Luna · Siargao Island</p>
+            <h1 class="max-w-4xl text-[clamp(4.1rem,11vw,9.4rem)] font-black leading-[.76] tracking-[-.075em]">
+              MEET<br /><span class="text-[#7ee5d7]">CLOUD 9</span>
+            </h1>
+            <p class="mt-8 max-w-2xl text-lg leading-8 text-white/88 md:text-xl">
+              A wooden boardwalk, a shallow reef and one of the Pacific’s most recognisable right-hand waves — this is Siargao at full volume.
+            </p>
+            <div class="mt-10 flex flex-wrap gap-3">
+              <a href="#visit" class="rounded-full bg-[#f5a24b] px-6 py-3 text-sm font-black text-[#083b48] transition hover:-translate-y-0.5 hover:bg-[#ffd18b]">PLAN YOUR STOP</a>
+              <a href="#the-break" class="rounded-full border border-white/45 bg-white/10 px-6 py-3 text-sm font-black text-white backdrop-blur transition hover:bg-white/20">KNOW THE REEF</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-label="Quick facts" class="relative z-10 -mt-1 bg-[#083b48] text-white">
+        <div class="shell grid grid-cols-2 border-x border-white/10 md:grid-cols-4">
+          <div class="border-b border-r border-white/10 p-5 md:border-b-0 md:p-7">
+            <p class="text-3xl font-black text-[#7ee5d7]">4.5 / 5</p>
+            <p class="mt-1 text-xs font-bold uppercase tracking-[.15em] text-white/60">Google Maps rating</p>
+          </div>
+          <div class="border-b border-white/10 p-5 md:border-b-0 md:border-r md:p-7">
+            <p class="text-3xl font-black text-[#ffd18b]">24 hours</p>
+            <p class="mt-1 text-xs font-bold uppercase tracking-[.15em] text-white/60">Map listing · facilities may vary</p>
+          </div>
+          <div class="border-r border-white/10 p-5 md:p-7">
+            <p class="text-3xl font-black text-[#7ee5d7]">Sep–Nov</p>
+            <p class="mt-1 text-xs font-bold uppercase tracking-[.15em] text-white/60">Peak surf season</p>
+          </div>
+          <div class="p-5 md:p-7">
+            <p class="text-3xl font-black text-[#ffd18b]">≈ 2 hours</p>
+            <p class="mt-1 text-xs font-bold uppercase tracking-[.15em] text-white/60">Easy sightseeing baseline</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="wave-rule my-10"></div>
+
+      <section id="the-break" class="shell scroll-mt-24 py-16 md:py-24">
+        <div class="grid items-start gap-10 lg:grid-cols-[1.04fr_.96fr] lg:gap-16">
+          <div>
+            <p class="eyebrow text-[#0a6e86]">The break</p>
+            <h2 class="section-title mt-5 max-w-3xl text-[#083b48]">Beautiful from shore.<br />Serious in the water.</h2>
+            <p class="mt-7 max-w-2xl text-lg leading-8 text-[#38565e]">
+              Cloud 9 is a powerful, hollow right-hander breaking over sharp reef. On solid swell it belongs to advanced surfers. If you are learning, resist the temptation to paddle straight into the famous peak — nearby Jacking Horse is the friendlier place to start with a local instructor.
+            </p>
+
+            <div class="mt-10 grid gap-4 sm:grid-cols-3">
+              <div class="rounded-[1.6rem] bg-[#083b48] p-5 text-white">
+                <span class="text-2xl">↗</span>
+                <h3 class="mt-8 font-black">Mid–high tide</h3>
+                <p class="mt-2 text-sm leading-6 text-white/70">Generally the more appropriate window for the main reef break.</p>
+              </div>
+              <div class="rounded-[1.6rem] bg-[#f3e7cf] p-5">
+                <span class="text-2xl">◌</span>
+                <h3 class="mt-8 font-black">Sharp reef</h3>
+                <p class="mt-2 text-sm leading-6 text-[#4f5d5b]">Booties are useful. Low tide exposes shallower sections and adds risk.</p>
+              </div>
+              <div class="rounded-[1.6rem] bg-[#d8f5ec] p-5">
+                <span class="text-2xl">〰</span>
+                <h3 class="mt-8 font-black">Respect the lineup</h3>
+                <p class="mt-2 text-sm leading-6 text-[#365c5a]">Wait your turn, surf within your ability and follow local guidance.</p>
+              </div>
+            </div>
+          </div>
+
+          <figure class="relative lg:mt-20">
+            <div class="absolute -left-5 -top-5 -z-10 h-full w-full rounded-[2rem] border-2 border-[#0a6e86]/20"></div>
+            <img
+              src="/images/cloud9-boardwalk.jpg"
+              alt="Cloud 9 boardwalk in General Luna at sunrise"
+              width="1280"
+              height="853"
+              loading="lazy"
+              class="aspect-[4/5] w-full rounded-[2rem] object-cover"
+            />
+            <figcaption class="mt-3 text-xs font-semibold text-[#587078]">The boardwalk is as much a sunrise lookout as it is a gateway to the surf.</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section id="visit" class="scroll-mt-24 bg-[#f3e7cf] py-20 md:py-28">
+        <div class="shell">
+          <div class="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:gap-14">
+            <div>
+              <p class="eyebrow text-[#9f513e]">Visit notes</p>
+              <h2 class="section-title mt-5 text-[#083b48]">Plan around the tide, not a timetable.</h2>
+              <p class="mt-6 max-w-lg leading-7 text-[#56625f]">The surf area itself is listed as open around the clock, but staffed facilities, event access and managed-entry arrangements can follow local operating conditions.</p>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2">
+              <article class="rounded-[1.8rem] bg-[#083b48] p-7 text-white md:row-span-2">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#7ee5d7]">Ticket / fees</p>
+                <h3 class="mt-4 text-3xl font-black">Bring small cash.</h3>
+                <p class="mt-4 leading-7 text-white/75">A small entrance or boardwalk fee can apply. Recent visitor guides commonly report about <strong class="text-white">₱100 per person</strong>. Treat that as a planning figure, not a guaranteed tariff, and confirm at the gate.</p>
+                <div class="mt-8 border-t border-white/15 pt-5 text-sm text-white/65">Board rental and surf-lesson prices vary by shop and instructor.</div>
+              </article>
+
+              <article class="rounded-[1.8rem] bg-white/75 p-7">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#0a6e86]">Parking</p>
+                <h3 class="mt-3 text-2xl font-black text-[#083b48]">Arrive early when it matters.</h3>
+                <p class="mt-3 leading-7 text-[#56625f]">Parking is available around the managed entrance / Cloud 9 Drive area. Capacity can get tight for sunrise, sunset and major surf days.</p>
+              </article>
+
+              <article class="rounded-[1.8rem] bg-[#ffd9aa] p-7">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#8c4b2f]">Best time & stay</p>
+                <h3 class="mt-3 text-2xl font-black text-[#083b48]">Sunrise + about two hours.</h3>
+                <p class="mt-3 leading-7 text-[#5d5548]">For atmosphere and photography, sunrise is hard to beat. For surf, read the swell and tide first. Two hours covers an unhurried boardwalk stop; surfers should allow much longer.</p>
+              </article>
+
+              <article class="rounded-[1.8rem] bg-[#d8f5ec] p-7 md:col-span-2">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#0a6e86]">Bring</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  {['Reef-safe sunscreen', 'Water', 'Small cash', 'Rashguard', 'Reef booties for surfers', 'Dry bag', 'Helmet if riding'].map((item) => (
+                    <span class="rounded-full border border-[#0a6e86]/20 bg-white/65 px-4 py-2 text-sm font-bold text-[#23525b]">{item}</span>
+                  ))}
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="getting-there" class="shell scroll-mt-24 py-20 md:py-28">
+        <div class="grid gap-12 lg:grid-cols-2">
+          <div>
+            <p class="eyebrow text-[#0a6e86]">Detailed transport</p>
+            <h2 class="section-title mt-5 text-[#083b48]">Follow the east coast to the wave.</h2>
+            <div class="mt-10 space-y-0 border-l-2 border-[#0a6e86]/20">
+              <article class="relative pb-10 pl-8">
+                <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-[#0a6e86] ring-4 ring-[#edf9f5]"></span>
+                <h3 class="text-xl font-black">From Sayak Airport (IAO)</h3>
+                <p class="mt-2 leading-7 text-[#557078]">Take an airport van, arranged transfer or private vehicle toward General Luna / Cloud 9. Official tourism guidance puts the transfer at roughly 30–45 minutes.</p>
+              </article>
+              <article class="relative pb-10 pl-8">
+                <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-[#19a7a0] ring-4 ring-[#edf9f5]"></span>
+                <h3 class="text-xl font-black">From central General Luna</h3>
+                <p class="mt-2 leading-7 text-[#557078]">Follow Tourism Road / the coastal route toward Catangnan and Cloud 9. E-trikes and tricycles are easy for point-to-point travel; scooters give more flexibility if you are confident riding.</p>
+              </article>
+              <article class="relative pb-10 pl-8">
+                <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-[#f5a24b] ring-4 ring-[#edf9f5]"></span>
+                <h3 class="text-xl font-black">From Dapa Port</h3>
+                <p class="mt-2 leading-7 text-[#557078]">Use a tricycle, van or arranged transfer toward General Luna, then continue to Cloud 9. Agree on the fare before departure if it is not clearly posted.</p>
+              </article>
+              <article class="relative pl-8">
+                <span class="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-[#e56d55] ring-4 ring-[#edf9f5]"></span>
+                <h3 class="text-xl font-black">If you rent a scooter</h3>
+                <p class="mt-2 leading-7 text-[#557078]">Wear a helmet, keep left, slow down through villages and be cautious after rain. Avoid riding if you are not comfortable on unfamiliar island roads.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="overflow-hidden rounded-[2rem] border border-[#083b48]/10 bg-white shadow-[0_28px_70px_rgba(8,59,72,.12)]">
+            <iframe
+              class="map-frame h-[600px] w-full border-0"
+              src="https://www.google.com/maps?q=9.8136625,126.1651406&hl=en&gl=ph&z=16&output=embed"
+              title="Google Map showing Cloud 9 Surfing Area, General Luna, Siargao"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <section id="nearby" class="scroll-mt-24 bg-[#083b48] py-20 text-white md:py-28">
+        <div class="shell">
+          <div class="grid gap-8 lg:grid-cols-[.82fr_1.18fr] lg:items-end">
+            <div>
+              <p class="eyebrow text-[#7ee5d7]">Around Cloud 9</p>
+              <h2 class="section-title mt-5">Eat close.<br />Explore wider.</h2>
+            </div>
+            <p class="max-w-xl justify-self-end text-lg leading-8 text-white/68">General Luna makes it easy to turn a surf-watching stop into a full day: casual food near the break, a learner-friendly reef nearby, and island or rock-pool trips when you have more time.</p>
+          </div>
+
+          <div class="mt-14 grid gap-5 lg:grid-cols-3">
+            <article class="rounded-[1.8rem] border border-white/12 bg-white/7 p-7">
+              <p class="text-xs font-black uppercase tracking-[.18em] text-[#ffd18b]">Nearby food</p>
+              <h3 class="mt-5 text-2xl font-black">Loka Siargao</h3>
+              <p class="mt-3 leading-7 text-white/68">A relaxed beachfront stop on Cloud 9 Drive for breakfast plates, smoothies, pizza and an easy post-surf reset.</p>
+            </article>
+            <article class="rounded-[1.8rem] border border-white/12 bg-white/7 p-7">
+              <p class="text-xs font-black uppercase tracking-[.18em] text-[#ffd18b]">Nearby food</p>
+              <h3 class="mt-5 text-2xl font-black">Siargao Hawker</h3>
+              <p class="mt-3 leading-7 text-white/68">Singaporean and Malay comfort-food flavours near the Jacking Horse / Cloud 9 stretch — a practical casual meal before or after the boardwalk.</p>
+            </article>
+            <article class="rounded-[1.8rem] border border-white/12 bg-white/7 p-7">
+              <p class="text-xs font-black uppercase tracking-[.18em] text-[#ffd18b]">Nearby food</p>
+              <h3 class="mt-5 text-2xl font-black">Masala Siargao</h3>
+              <p class="mt-3 leading-7 text-white/68">Modern Indian food in the Cloud 9 area, including plant-based and gluten-conscious choices in a calmer garden setting.</p>
+            </article>
+          </div>
+
+          <div class="mt-16 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <article class="overflow-hidden rounded-[1.9rem] bg-[#edf9f5] text-[#083b48]">
+              <div class="h-56 overflow-hidden">
+                <img src="/images/cloud9-boardwalk.jpg" alt="Surf coastline near Cloud 9" width="1280" height="853" loading="lazy" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+              </div>
+              <div class="p-7">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#0a6e86]">Nearby attraction</p>
+                <h3 class="mt-3 text-3xl font-black">Jacking Horse</h3>
+                <p class="mt-3 leading-7 text-[#506b72]">A nearby, more approachable reef break. For a first surf session, pair it with a local instructor rather than starting at the Cloud 9 main peak.</p>
+              </div>
+            </article>
+            <article class="overflow-hidden rounded-[1.9rem] bg-[#edf9f5] text-[#083b48]">
+              <div class="h-56 overflow-hidden">
+                <img src="/images/guyam-island.jpg" alt="Aerial view of palm-lined Guyam Island near Siargao" width="1280" height="853" loading="lazy" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+              </div>
+              <div class="p-7">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#0a6e86]">Island-hopping</p>
+                <h3 class="mt-3 text-3xl font-black">Guyam Island</h3>
+                <p class="mt-3 leading-7 text-[#506b72]">A compact palm-ringed island often combined with the classic island-hopping circuit from General Luna.</p>
+              </div>
+            </article>
+            <article class="overflow-hidden rounded-[1.9rem] bg-[#edf9f5] text-[#083b48] md:col-span-2 lg:col-span-1">
+              <div class="h-56 overflow-hidden">
+                <img src="/images/magpupungko.jpg" alt="Magpupungko Beach and rock formations on Siargao" width="1280" height="853" loading="lazy" class="h-full w-full object-cover transition duration-500 hover:scale-105" />
+              </div>
+              <div class="p-7">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#0a6e86]">Day-trip extension</p>
+                <h3 class="mt-3 text-3xl font-black">Magpupungko</h3>
+                <p class="mt-3 leading-7 text-[#506b72]">A northbound Siargao detour known for rock formations and tidal pools. Check local tide and access conditions before making the trip.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="trip-list" class="scroll-mt-24 bg-[#d8f5ec] py-20 md:py-28">
+        <div class="shell grid gap-10 lg:grid-cols-[1fr_.8fr] lg:gap-16">
+          <div>
+            <p class="eyebrow text-[#0a6e86]">Your Siargao list</p>
+            <h2 class="section-title mt-5 text-[#083b48]">Build a small day around Cloud 9.</h2>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-[#49666b]">Tap anything you want to remember. Your list is stored only in this browser on this device using localStorage. Nothing is uploaded or sent to a server.</p>
+
+            <div class="mt-9 grid gap-3 sm:grid-cols-2">
+              {itineraryItems.map((item) => (
+                <button
+                  type="button"
+                  class="itinerary-add group rounded-[1.4rem] border border-[#0a6e86]/15 bg-white/70 p-5 text-left transition hover:-translate-y-0.5 hover:border-[#0a6e86]/35 hover:bg-white"
+                  data-id={item.id}
+                  data-name={item.name}
+                  data-meta={item.meta}
+                >
+                  <span class="flex items-start justify-between gap-4">
+                    <span>
+                      <span class="block font-black text-[#083b48]">{item.name}</span>
+                      <span class="mt-1 block text-xs font-semibold text-[#658086]">{item.meta}</span>
+                    </span>
+                    <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#083b48] text-lg font-black text-white transition group-hover:bg-[#0a6e86]">+</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <aside class="card self-start rounded-[2rem] p-6 md:p-8" aria-labelledby="saved-title">
+            <div class="flex items-center justify-between gap-4">
+              <div>
+                <p class="text-xs font-black uppercase tracking-[.18em] text-[#0a6e86]">On this device</p>
+                <h3 id="saved-title" class="mt-2 text-2xl font-black text-[#083b48]">Saved itinerary</h3>
+              </div>
+              <button id="clear-itinerary" type="button" class="rounded-full border border-[#083b48]/15 px-3 py-2 text-xs font-extrabold text-[#49666b] transition hover:bg-[#083b48] hover:text-white">Clear</button>
+            </div>
+            <div id="itinerary-live" class="sr-only" aria-live="polite"></div>
+            <ul id="saved-itinerary" class="mt-6 space-y-3"></ul>
+            <p id="empty-itinerary" class="mt-6 rounded-[1.2rem] bg-[#edf9f5] p-5 text-sm leading-6 text-[#60777b]">Nothing saved yet. Add a stop from the list.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="faq" class="shell scroll-mt-24 py-20 md:py-28">
+        <div class="grid gap-12 lg:grid-cols-[.7fr_1.3fr]">
+          <div>
+            <p class="eyebrow text-[#0a6e86]">FAQ</p>
+            <h2 class="section-title mt-5 text-[#083b48]">Before you go.</h2>
+            <p class="mt-6 leading-7 text-[#587078]">Conditions, access and local fees can change. When surf safety or entry arrangements matter, confirm them locally on the day.</p>
+          </div>
+          <div class="divide-y divide-[#083b48]/12 border-y border-[#083b48]/12">
+            {faqItems.map((item) => (
+              <details class="group py-2">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-lg font-black text-[#083b48] marker:content-none">
+                  {item.q}
+                  <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#083b48] text-white transition group-open:rotate-45">+</span>
+                </summary>
+                <p class="max-w-3xl pb-6 pr-12 leading-7 text-[#587078]">{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-[#f5a24b] py-10">
+        <div class="shell flex flex-col justify-between gap-6 md:flex-row md:items-center">
+          <div>
+            <p class="text-xs font-black uppercase tracking-[.18em] text-[#6d3e28]">One last reef rule</p>
+            <p class="mt-2 text-2xl font-black text-[#083b48]">Leave the coast better than you found it.</p>
+          </div>
+          <a href="#top" class="self-start rounded-full bg-[#083b48] px-5 py-3 text-xs font-black text-white md:self-auto">BACK TO TOP ↑</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-[#052c35] py-12 text-white">
+      <div class="shell grid gap-8 lg:grid-cols-[.75fr_1.25fr]">
+        <div>
+          <img src="/logo.svg" alt="Cloud 9 Siargao" width="210" height="52" class="h-12 w-auto rounded-md bg-white/90 px-2 py-1" />
+          <p class="mt-5 max-w-md text-sm leading-6 text-white/58">Independent visitor guide for trip planning. This website is not an official website of Cloud 9 Surfing Area, the Municipality of General Luna, or any tourism authority.</p>
+        </div>
+        <div class="grid gap-7 sm:grid-cols-2">
+          <div>
+            <h2 class="text-xs font-black uppercase tracking-[.18em] text-[#7ee5d7]">Information sources</h2>
+            <p class="mt-3 text-sm leading-6 text-white/58">Visitor guidance is based on the Cloud 9 listing and Philippine tourism guidance. Always re-check tide, surf, fee and access conditions locally.</p>
+            <a href="https://philippines.travel/spots/siargao-cloud9/index" target="_blank" rel="noopener noreferrer" class="mt-3 inline-block text-sm font-bold text-white underline decoration-white/30 underline-offset-4">Philippines Travel guide ↗</a>
+          </div>
+          <div>
+            <h2 class="text-xs font-black uppercase tracking-[.18em] text-[#7ee5d7]">Photo credits</h2>
+            <p class="mt-3 text-xs leading-6 text-white/55">
+              Cloud 9: <a class="underline" href="https://commons.wikimedia.org/wiki/File:Siargao_Cloud_9.jpg" target="_blank" rel="noopener noreferrer">Spraken eboy2887</a> · Boardwalk: <a class="underline" href="https://commons.wikimedia.org/wiki/File:Cloud_9_Boardwalk,_Siargao.jpg" target="_blank" rel="noopener noreferrer">JupitReyes</a> · Guyam: <a class="underline" href="https://commons.wikimedia.org/wiki/File:Picturesque_Guyam_Island,_Siargao.jpg" target="_blank" rel="noopener noreferrer">Michael Angelo Luna</a> · Magpupungko: <a class="underline" href="https://commons.wikimedia.org/wiki/File:Magpupungko_Beach.jpg" target="_blank" rel="noopener noreferrer">Wolfgang Hägele</a>. All <a class="underline" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a> via Wikimedia Commons. Local copies are unmodified; display crops are applied with CSS.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      type SavedItem = { id: string; name: string; meta: string };
+      const storageKey = 'cloud9-siargao-itinerary-v1';
+      const list = document.querySelector<HTMLUListElement>('#saved-itinerary');
+      const empty = document.querySelector<HTMLElement>('#empty-itinerary');
+      const live = document.querySelector<HTMLElement>('#itinerary-live');
+      const clearButton = document.querySelector<HTMLButtonElement>('#clear-itinerary');
+      const addButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.itinerary-add'));
+
+      const readSaved = (): SavedItem[] => {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(storageKey) ?? '[]');
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      };
+
+      const writeSaved = (items: SavedItem[]) => {
+        localStorage.setItem(storageKey, JSON.stringify(items));
+      };
+
+      const render = () => {
+        if (!list || !empty) return;
+        const saved = readSaved();
+        list.innerHTML = '';
+        empty.hidden = saved.length > 0;
+
+        saved.forEach((item) => {
+          const li = document.createElement('li');
+          li.className = 'flex items-start justify-between gap-4 rounded-[1.1rem] border border-[#083b48]/10 bg-white p-4';
+
+          const copy = document.createElement('div');
+          const title = document.createElement('p');
+          title.className = 'font-black text-[#083b48]';
+          title.textContent = item.name;
+          const meta = document.createElement('p');
+          meta.className = 'mt-1 text-xs font-semibold text-[#71868a]';
+          meta.textContent = item.meta;
+          copy.append(title, meta);
+
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'shrink-0 rounded-full border border-[#083b48]/15 px-3 py-1.5 text-xs font-extrabold text-[#49666b] hover:bg-[#083b48] hover:text-white';
+          remove.textContent = 'Remove';
+          remove.setAttribute('aria-label', `Remove ${item.name} from itinerary`);
+          remove.addEventListener('click', () => {
+            writeSaved(readSaved().filter((savedItem) => savedItem.id !== item.id));
+            if (live) live.textContent = `${item.name} removed.`;
+            render();
+          });
+
+          li.append(copy, remove);
+          list.append(li);
+        });
+
+        addButtons.forEach((button) => {
+          const isSaved = saved.some((item) => item.id === button.dataset.id);
+          button.disabled = isSaved;
+          button.classList.toggle('opacity-55', isSaved);
+          const badge = button.querySelector<HTMLElement>('span > span:last-child');
+          if (badge) badge.textContent = isSaved ? '✓' : '+';
+        });
+      };
+
+      addButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const item: SavedItem = {
+            id: button.dataset.id ?? '',
+            name: button.dataset.name ?? '',
+            meta: button.dataset.meta ?? '',
+          };
+          if (!item.id) return;
+          const saved = readSaved();
+          if (!saved.some((savedItem) => savedItem.id === item.id)) {
+            writeSaved([...saved, item]);
+            if (live) live.textContent = `${item.name} added.`;
+            render();
+          }
+        });
+      });
+
+      clearButton?.addEventListener('click', () => {
+        localStorage.removeItem(storageKey);
+        if (live) live.textContent = 'Itinerary cleared.';
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
